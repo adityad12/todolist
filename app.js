@@ -13,7 +13,8 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
-mongoose.connect("mongodb+srv://adityadandwate2003learn:Aditya%409422@cluster0.8jjpxcc.mongodb.net/todolistDB");
+// mongoose.connect("mongodb+srv://adityadandwate2003learn:Aditya%409422@cluster0.8jjpxcc.mongodb.net/todolistDB");
+mongoose.connect("mongodb://127.0.0.1:27017/todolistDB", {useNewUrlParser: true});
 
 const itemSchema = new mongoose.Schema({
   name: {
@@ -50,7 +51,7 @@ const List = mongoose.model("List", listSchema);
 
 
 
-app.get("/", function(req, res) {
+app.get("/", async(req, res) =>{
 
   Item.find().then((foundItems)=>{
     if(foundItems.length=== 0){
@@ -62,12 +63,14 @@ app.get("/", function(req, res) {
       });
       res.redirect("/");
     }else{
-      res.render("list", {listTitle: "Today", newListItems: foundItems});
-    }
+      res.render("list", {listName:null, listTitle: "Today", newListItems: foundItems});
+    }  
    
   }).catch((err)=>{
     console.log(err);
   });
+
+  
   
 
 });
@@ -93,7 +96,7 @@ app.get("/:customListName", (req,res)=>{
   }).catch((err)=>{
     console.log(err)
   })
-  
+
   
 });
 
